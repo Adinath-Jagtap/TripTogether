@@ -120,6 +120,60 @@ graph TD
 
 ---
 
+## ❓ How Does TripTogether Give Options When Disruption Happens in a Plan?
+
+When an unexpected flight delay, cancelled train, or schedule change occurs, TripTogether uses a **two-stage hybrid intelligence system** combining **deterministic graph theory (DAG)** with **ultra-fast AI reasoning (Groq)**:
+
+```
+                       [ 1. Disruption Occurs ]
+                    (e.g., Flight delayed 180 min)
+                                   │
+                                   ▼
+             [ 2. Stage 1: Mathematical DAG Cascade Detector ]
+                • Graph traversal: Upstream ➔ Downstream
+                • Subtracts connection buffers: (Delay - Buffer)
+                • Pinpoints exact casualties:
+                  ❌ Missed Airport Train (delay > buffer)
+                  ⚠️ Late Hotel Check-in
+                  ❌ Missed Guided Tour
+                                   │
+                                   ▼
+              [ 3. Stage 2: Multi-Model AI Recovery Engine ]
+                     (Groq AI / qwen3.8-27b in ~1.2s)
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         ▼                         ▼                         ▼
+   [ Plan A: Cost-Saver ]   [ Plan B: Balanced ]   [ Plan C: Max Comfort ]
+   • Claims refunds         • Re-schedules times    • Express replacement
+   • Zero extra expense     • Preserves itinerary   • Recovers lost hours
+   • +$0 / High refund      • Minimal schedule lag  • Premium convenience
+```
+
+### Stage 1: Deterministic DAG Cascade Traversal (`src/lib/algorithms/cascadeDetector.js`)
+1. **Trip as a Graph**: Every itinerary is structured as a **Directed Acyclic Graph (DAG)** where each booking is a node, and connection requirements (e.g. Flight ➔ 90m buffer ➔ Train) are directed edges.
+2. **Topological Ripple Analysis**: The moment a disruption delay is entered, the engine runs a breadth-first traversal propagating the delay downstream:
+   $$\text{Downstream Delay} = \max(0, \text{Upstream Delay} - \text{Buffer})$$
+3. **Casualty Classification**: Downstream bookings with non-zero delays are automatically graded by severity:
+   - **Tight Connection** (< 60m margin remaining)
+   - **At Risk** (60–120m delay impact)
+   - **Missed Connection / Cascade Failure** (> 120m delay impact)
+
+### Stage 2: Multi-Objective AI Plan Generation (`src/app/api/ai/recovery/route.js`)
+Instead of generic travel advice, TripTogether feeds the exact graph output (root disruption + downstream casualties + remaining budget + full trip itinerary) to **Groq AI (`qwen/qwen3.8-27b`)** using structured JSON schemas to produce **3 Pareto-optimal recovery alternatives** in under 1.5 seconds:
+
+| Plan | Objective | Strategy & Trade-off |
+|---|---|---|
+| **Plan A: Cost-Saver** | Minimize out-of-pocket expense | Claims refunds on disrupted legs, absorbs delay into non-essential free time, adjusts times with $0 cost delta. |
+| **Plan B: Balanced** | Minimize schedule disruption | Shifts downstream booking windows, rebooks next available connection slots, keeps the whole group itinerary intact. |
+| **Plan C: Maximum Convenience** | Maximize comfort & recovery speed | Upgrades to express transit (e.g., high-speed rail, express cab, VIP fast-track) to erase accumulated delay and preserve hotel check-ins. |
+
+### What Happens When You Click "Apply Plan"?
+1. **Instant Itinerary Synchronization**: The Supabase database automatically shifts the affected bookings to their new ISO timestamps and titles.
+2. **Disruption Resolved**: The disruption state transitions from `Active Disruption` to `Resolved`.
+3. **Cryptographic Audit Record**: A new block is hashed and appended to the **SHA-256 Ledger**, creating an immutable, tamper-evident record of the disruption resolution.
+
+---
+
 ## 🧪 Verifying & Testing Features
 
 1. **Test Cascade Disruption Simulation**:

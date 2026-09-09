@@ -90,8 +90,8 @@ input, select, textarea { font-family: inherit; }
 img { max-width: 100%; display: block; }
 
 /* ─── Utility Classes ──────────────────────────────────────────── */
-.container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
-.container-narrow { max-width: var(--max-width-narrow); margin: 0 auto; padding: 0 24px; }
+.container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
+.container-narrow { width: 100%; max-width: var(--max-width-narrow); margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
 
 /* ─── Typography ───────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6 { font-weight: 600; line-height: 1.2; letter-spacing: -0.025em; color: var(--text-primary); }

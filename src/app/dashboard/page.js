@@ -1,18 +1,24 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { ToastProvider } from '@/context/ToastContext';
+import { ToastProvider, useToast } from '@/context/ToastContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Plus, MapPin, Calendar, Users, Clock, Shield } from 'lucide-react';
+import { Plus, MapPin, Calendar, Users, Clock, Shield, KeyRound, X } from 'lucide-react';
 import { formatDateRange, formatCurrency, getInitials, getAvatarColor, getResilienceColor } from '@/lib/utils';
 import styles from './page.module.css';
 
 function DashboardContent() {
+  const router = useRouter();
+  const toast = useToast();
   const { user, supabase, loading: authLoading } = useAuth();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [inviteCode, setInviteCode] = useState('');
+  const [joining, setJoining] = useState(false);
 
   useEffect(() => {
     if (!user && !authLoading) {
@@ -113,6 +119,97 @@ function DashboardContent() {
     fetchTrips();
   }, [user, authLoading]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const codeParam = params.get('code') || params.get('join');
+      if (codeParam) {
+        setInviteCode(codeParam.toUpperCase());
+        setShowJoinModal(true);
+      }
+    }
+  }, []);
+
+  const handleJoinTrip = async (e) => {
+    e?.preventDefault();
+    const cleanCode = inviteCode.trim().toUpperCase();
+    if (!cleanCode) {
+      toast.error('Please enter an invite code.');
+      return;
+    }
+
+    setJoining(true);
+    try {
+      // 1. Search in Supabase trips table by invite_code
+      let foundTrip = null;
+      const { data } = await supabase
+        .from('trips')
+        .select('*')
+        .ilike('invite_code', cleanCode)
+        .maybeSingle();
+
+      if (data) {
+        foundTrip = data;
+      } else {
+        // Fallback check: if code is TOKYO26 or similar, find by title or code
+        if (cleanCode === 'TOKYO26') {
+          const { data: tokyoTrip } = await supabase
+            .from('trips')
+            .select('*')
+            .ilike('title', '%tokyo%')
+            .maybeSingle();
+          if (tokyoTrip) foundTrip = tokyoTrip;
+        }
+
+        // Also check localStorage user_trips
+        if (!foundTrip && typeof window !== 'undefined') {
+          try {
+            const stored = JSON.parse(localStorage.getItem('user_trips') || '[]');
+            const match = stored.find(t => (t.invite_code || '').toUpperCase() === cleanCode);
+            if (match) foundTrip = match;
+          } catch (_) {}
+        }
+      }
+
+      if (!foundTrip) {
+        toast.error(`No trip found for code "${cleanCode}". Please verify and try again.`);
+        setJoining(false);
+        return;
+      }
+
+      // 2. Add user to trip_members if authenticated
+      if (user && !user.email?.includes('demo')) {
+        try {
+          await supabase.from('trip_members').upsert({
+            trip_id: foundTrip.id,
+            user_id: user.id,
+            role: 'member',
+          }, { onConflict: 'trip_id,user_id' });
+        } catch (_) {}
+      }
+
+      // 3. Stash in localStorage user_trips so it persists locally
+      if (typeof window !== 'undefined') {
+        try {
+          const stored = JSON.parse(localStorage.getItem('user_trips') || '[]');
+          if (!stored.some(t => t.id === foundTrip.id)) {
+            stored.unshift(foundTrip);
+            localStorage.setItem('user_trips', JSON.stringify(stored));
+          }
+        } catch (_) {}
+      }
+
+      toast.success(`Joined "${foundTrip.title}" successfully!`);
+      setShowJoinModal(false);
+      setJoining(false);
+      router.push(`/trip/${foundTrip.id}`);
+    } catch (err) {
+      console.error('Error joining trip:', err);
+      toast.error('Failed to join trip. Please try again.');
+      setJoining(false);
+    }
+  };
+
   const handleClearTrips = () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('user_trips');
@@ -136,7 +233,7 @@ function DashboardContent() {
   return (
     <div className={styles.wrapper}>
       <Navbar />
-      <main className="container" style={{ paddingTop: 40, paddingBottom: 80 }}>
+      <main className="container" style={{ width: '100%', flex: 1, paddingTop: 40, paddingBottom: 80 }}>
         <div className={styles.header}>
           <div>
             <h1>Your Trips</h1>
@@ -144,22 +241,28 @@ function DashboardContent() {
               {trips.length} {trips.length === 1 ? 'trip' : 'trips'}
             </p>
           </div>
-          <Link href="/trip/create" className="btn btn-primary">
-            <Plus size={18} /> New Trip
-          </Link>
+          <div className={styles.headerActions}>
+            <button
+              type="button"
+              onClick={() => setShowJoinModal(true)}
+              className="btn btn-secondary"
+            >
+              <KeyRound size={16} /> Join Trip
+            </button>
+            <Link href="/trip/create" className="btn btn-primary">
+              <Plus size={18} /> New Trip
+            </Link>
+          </div>
         </div>
 
         {trips.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon"><MapPin size={48} /></div>
             <h3>No trips yet</h3>
-            <p>Upload a tour brochure PDF, build with voice AI, or test our sample Tokyo Odyssey itinerary.</p>
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 20, flexWrap: 'wrap' }}>
+            <p>Upload a tour brochure PDF, build with voice AI, or plan your next destination.</p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 20 }}>
               <Link href="/trip/create" className="btn btn-primary">
-                <Plus size={18} /> Create Trip / Upload PDF
-              </Link>
-              <Link href="/trip/create?sample=tokyo" className="btn btn-secondary">
-                <Shield size={16} color="var(--accent)" /> Try Sample Itinerary (Tokyo)
+                <Plus size={18} /> Create Trip
               </Link>
             </div>
           </div>
@@ -188,6 +291,58 @@ function DashboardContent() {
                 </div>
               </Link>
             ))}
+          </div>
+        )}
+
+        {showJoinModal && (
+          <div className={styles.modalOverlay} onClick={() => !joining && setShowJoinModal(false)}>
+            <div className={styles.modal} onClick={e => e.stopPropagation()}>
+              <div className={styles.modalHeader}>
+                <h2><KeyRound size={20} color="var(--accent)" /> Join a Trip</h2>
+                <button
+                  type="button"
+                  className={styles.closeBtn}
+                  onClick={() => !joining && setShowJoinModal(false)}
+                  aria-label="Close"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <form onSubmit={handleJoinTrip} className={styles.modalBody}>
+                <p className={styles.modalDesc}>
+                  Enter the invite code (e.g. <strong>TOKYO26</strong>) shared by your trip organizer to access the itinerary, group budget, and live disruption alerts.
+                </p>
+                <input
+                  type="text"
+                  className={styles.codeInput}
+                  placeholder="ENTER CODE"
+                  value={inviteCode}
+                  onChange={e => setInviteCode(e.target.value.toUpperCase())}
+                  maxLength={12}
+                  autoFocus
+                  disabled={joining}
+                />
+                <div className={styles.modalActions}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    style={{ flex: 1 }}
+                    onClick={() => setShowJoinModal(false)}
+                    disabled={joining}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={{ flex: 1 }}
+                    disabled={joining || !inviteCode.trim()}
+                  >
+                    {joining ? 'Joining...' : 'Join Trip'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </main>

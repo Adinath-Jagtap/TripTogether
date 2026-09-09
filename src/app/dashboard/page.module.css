@@ -1,5 +1,5 @@
-.wrapper { min-height: 100vh; display: flex; flex-direction: column; }
-.header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; }
+.wrapper { min-height: 100vh; display: flex; flex-direction: column; width: 100%; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; width: 100%; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
 .tripCard {
   display: flex;
@@ -19,7 +19,110 @@
 .tripMembers { display: flex; align-items: center; gap: 6px; font-size: 0.8125rem; color: var(--text-secondary); }
 .tripBudget { font-size: 0.9375rem; font-weight: 600; color: var(--accent); }
 
+.headerActions { display: flex; align-items: center; gap: 10px; }
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-default, #e5e7eb);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 12px;
+}
+
+.modalHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.closeBtn:hover {
+  background: var(--bg-secondary, #f3f4f6);
+  color: var(--text-primary);
+}
+
+.modalBody {
+  padding: 12px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modalDesc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.codeInput {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 14px 16px;
+  border: 2px solid var(--border-default, #d1d5db);
+  border-radius: 12px;
+  background: var(--bg-input, #faf9f7);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.codeInput:focus {
+  border-color: var(--accent, #b45309);
+  background: #ffffff;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
 @media (max-width: 768px) {
   .grid { grid-template-columns: 1fr; }
   .header { flex-direction: column; gap: 16px; }
+  .headerActions { width: 100%; }
+  .headerActions > * { flex: 1; text-align: center; justify-content: center; }
 }
