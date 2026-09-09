@@ -1,0 +1,13 @@
+.catGrid { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.catCard { display: flex; align-items: center; gap: 10px; padding: 14px 16px !important; flex: 1; min-width: 140px; }
+.filters { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
+.searchWrap { position: relative; flex: 1; }
+.searchIcon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); pointer-events: none; }
+.expenseRow { display: flex; align-items: center; gap: 12px; padding: 16px !important; }
+.expIcon { color: var(--accent); flex-shrink: 0; }
+.expInfo { flex: 1; min-width: 0; }
+.expTitle { font-weight: 600; font-size: 0.9375rem; }
+.expMeta { font-size: 0.8125rem; color: var(--text-tertiary); margin-top: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.expAmount { font-weight: 700; font-size: 1rem; color: var(--accent); flex-shrink: 0; }
+
+@media (max-width: 768px) { .filters { flex-direction: column; } .catGrid { flex-direction: column; } }

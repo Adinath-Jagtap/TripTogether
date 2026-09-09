@@ -1,0 +1,116 @@
+.hero {
+  padding: 100px 0 80px;
+  text-align: center;
+}
+.heroContent {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+.heroAccent { color: var(--accent); }
+.heroSub {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 540px;
+  line-height: 1.6;
+}
+.heroCtas { display: flex; gap: 12px; margin-top: 8px; }
+
+/* Problem */
+.problemSection { padding: 60px 0; background: var(--bg-subtle); }
+.problemGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.problemCard { display: flex; flex-direction: column; gap: 12px; }
+.problemCard h3 { font-size: 1.125rem; }
+.problemCard p { font-size: 0.9375rem; }
+.problemIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Features */
+.featuresSection { padding: 80px 0; }
+.sectionHeader { text-align: center; margin-bottom: 48px; }
+.sectionHeader h2 { margin-bottom: 8px; font-size: 1.75rem; }
+.sectionHeader p { color: var(--text-tertiary); font-size: 1rem; }
+.featuresGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.featureCard { display: flex; flex-direction: column; gap: 12px; }
+.featureCard h3 { font-size: 1rem; }
+.featureCard p { font-size: 0.875rem; color: var(--text-secondary); }
+.featureIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--accent-light);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* How It Works */
+.howSection { padding: 80px 0; background: var(--bg-subtle); }
+.stepsGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.step { display: flex; flex-direction: column; gap: 8px; }
+.step h3 { font-size: 1rem; }
+.step p { font-size: 0.875rem; color: var(--text-secondary); }
+.stepNum {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* CTA */
+.ctaSection { padding: 80px 0; }
+.ctaCard {
+  text-align: center;
+  padding: 64px 32px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.ctaCard h2 { font-size: 1.75rem; }
+.ctaCard p { color: var(--text-secondary); max-width: 480px; }
+
+@media (max-width: 768px) {
+  .heroTitle { font-size: 2rem; }
+  .heroCtas { flex-direction: column; width: 100%; }
+  .heroCtas .btn { width: 100%; }
+  .problemGrid, .featuresGrid { grid-template-columns: 1fr; }
+  .stepsGrid { grid-template-columns: 1fr 1fr; }
+  .hero { padding: 60px 0 40px; }
+}
+
+@media (max-width: 480px) {
+  .stepsGrid { grid-template-columns: 1fr; }
+}

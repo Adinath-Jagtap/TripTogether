@@ -1,0 +1,24 @@
+.timeline { display: flex; flex-direction: column; gap: 32px; }
+.dayGroup { }
+.dayHeader { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-default); }
+.dayNum { font-weight: 700; font-size: 1rem; color: var(--text-primary); }
+.dayDate { font-size: 0.8125rem; color: var(--text-tertiary); }
+.emptyDay { padding: 20px; text-align: center; }
+.emptyDay p { font-size: 0.8125rem; color: var(--text-tertiary); }
+.bookingCard { border-left: 3px solid var(--accent); padding: 16px !important; margin-bottom: 8px; }
+.bookingHeader { display: flex; align-items: center; gap: 12px; }
+.bookingIcon { flex-shrink: 0; }
+.bookingInfo { flex: 1; min-width: 0; }
+.bookingTitle { font-weight: 600; font-size: 0.9375rem; }
+.bookingTime { font-size: 0.8125rem; color: var(--text-tertiary); margin-top: 2px; }
+.bookingRight { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.bookingCost { font-weight: 600; font-size: 0.875rem; color: var(--accent); }
+.depLine {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 0 4px 24px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  border-left: 2px dashed var(--border-strong);
+  margin-left: 16px;
+  margin-bottom: 4px;
+}

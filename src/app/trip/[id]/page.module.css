@@ -1,0 +1,2 @@
+.twoCol { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
+@media (max-width: 768px) { .twoCol { grid-template-columns: 1fr; } }

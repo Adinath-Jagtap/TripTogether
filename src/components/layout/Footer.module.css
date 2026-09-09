@@ -1,0 +1,28 @@
+.footer {
+  border-top: 1px solid var(--border-default);
+  padding: 32px 0;
+  margin-top: 80px;
+  background: var(--bg-subtle);
+}
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+}
+.brand svg { color: var(--accent); }
+.copy { font-size: 0.8125rem; color: var(--text-tertiary); }
+
+@media (max-width: 768px) {
+  .inner { flex-direction: column; gap: 12px; text-align: center; }
+}

@@ -1,0 +1,177 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #FFFFFF;
+  border: 1px solid #E7E5E2;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #171717;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: #737373;
+}
+
+.micSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: #F8F7F4;
+  border-radius: 12px;
+  border: 1px solid #E7E5E2;
+  position: relative;
+  gap: 14px;
+}
+
+.micButton {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: #B45309;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.28);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.micButton:hover {
+  transform: scale(1.05);
+  background: #92400E;
+}
+
+.recording {
+  background: #DC2626;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  70% { box-shadow: 0 0 0 16px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.transcriptPreview {
+  font-size: 0.875rem;
+  color: #171717;
+  text-align: center;
+  max-width: 480px;
+  min-height: 24px;
+  font-style: italic;
+}
+
+.transcriptPlaceholder {
+  color: #737373;
+  font-size: 0.8125rem;
+  font-style: normal;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.textInput {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #D4D1CC;
+  background: #FFFFFF;
+  font-size: 0.875rem;
+  color: #171717;
+  outline: none;
+  transition: border-color 0.15s ease;
+  font-family: inherit;
+}
+
+.textInput:focus {
+  border-color: #B45309;
+}
+
+.sendButton {
+  padding: 10px 18px;
+  background: #B45309;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: #92400E;
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aiResponseBox {
+  padding: 14px 16px;
+  background: #FEF3C7;
+  border-left: 3px solid #B45309;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aiResponseText {
+  font-size: 0.875rem;
+  color: #171717;
+  line-height: 1.5;
+}
+
+.missingBadgeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.missingBadge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(220, 38, 38, 0.08);
+  color: #B91C1C;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

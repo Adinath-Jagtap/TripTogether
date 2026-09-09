@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.vercel/
+.env.local
+.env
+.env*.local
+out/
+*.log
+.DS_Store
+Thumbs.db
+*.traineddata
+eng.traineddata
