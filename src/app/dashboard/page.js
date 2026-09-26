@@ -8,12 +8,16 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Plus, MapPin, Calendar, Users, Clock, Shield, KeyRound, X } from 'lucide-react';
 import { formatDateRange, formatCurrency, getInitials, getAvatarColor, getResilienceColor } from '@/lib/utils';
+import {
+  getUserTrips, getTripsByMembership, getTrip, getMemberCount,
+  getTripByInviteCode, addTripMember,
+} from '@/lib/firebase/firestore';
 import styles from './page.module.css';
 
 function DashboardContent() {
   const router = useRouter();
   const toast = useToast();
-  const { user, supabase, loading: authLoading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -29,40 +33,22 @@ function DashboardContent() {
 
     const fetchTrips = async () => {
       try {
-        // Allow URL ?reset=1 or localStorage clear to reset all locally staged trips
         if (typeof window !== 'undefined' && window.location.search.includes('reset=1')) {
           localStorage.removeItem('user_trips');
           window.history.replaceState({}, '', '/dashboard');
         }
 
-        const demoUserId = 'd0000000-0000-0000-0000-000000000001';
-        const userIdsToQuery = Array.from(new Set([user.id, (user.email?.includes('demo') ? demoUserId : null)].filter(Boolean)));
+        const uid = user.uid || user.id;
 
         // 1. Get trips where user is owner
         let ownedTrips = [];
-        const { data: ot } = await supabase
-          .from('trips')
-          .select('*')
-          .in('owner_id', userIdsToQuery);
-        if (ot) ownedTrips = ot;
+        try { ownedTrips = await getUserTrips(uid); } catch (_) {}
 
-        // 2. Get trips where user is a member
-        const { data: memberTrips } = await supabase
-          .from('trip_members')
-          .select('trip_id')
-          .in('user_id', userIdsToQuery);
+        // 2. Get trips where user is a member (via member_ids array field)
+        let memberTrips = [];
+        try { memberTrips = await getTripsByMembership(uid); } catch (_) {}
 
-        const tripIds = memberTrips?.map(m => m.trip_id) || [];
-        let joinedTrips = [];
-        if (tripIds.length > 0) {
-          const { data: joined } = await supabase
-            .from('trips')
-            .select('*')
-            .in('id', tripIds);
-          if (joined) joinedTrips = joined;
-        }
-
-        // 3. Retrieve any locally saved trips from localStorage
+        // 3. Retrieve locally saved trips
         let localTrips = [];
         if (typeof window !== 'undefined') {
           try {
@@ -71,44 +57,28 @@ function DashboardContent() {
           } catch (_) {}
         }
 
-        // 4. Combine and deduplicate only real/created trips by id
+        // 4. Combine and deduplicate
         const tripMap = new Map();
-
-        // Add database trips
         ownedTrips.forEach(t => tripMap.set(t.id, t));
-        joinedTrips.forEach(t => tripMap.set(t.id, t));
-
-        // Add any local storage trips (merging details)
+        memberTrips.forEach(t => { if (!tripMap.has(t.id)) tripMap.set(t.id, t); });
         localTrips.forEach(t => {
-          if (!tripMap.has(t.id)) {
-            tripMap.set(t.id, t);
-          } else {
-            tripMap.set(t.id, { ...tripMap.get(t.id), ...t });
-          }
+          if (!tripMap.has(t.id)) tripMap.set(t.id, t);
+          else tripMap.set(t.id, { ...tripMap.get(t.id), ...t });
         });
 
         const allTrips = Array.from(tripMap.values());
 
-        // For each trip, safely get member count without crashing on non-UUID
+        // 5. Get member counts
         for (const trip of allTrips) {
           try {
-            const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(trip.id);
-            if (isUuid) {
-              const { count } = await supabase
-                .from('trip_members')
-                .select('*', { count: 'exact', head: true })
-                .eq('trip_id', trip.id);
-              trip.memberCount = (count && count > 0) ? count : 1;
-            } else {
-              trip.memberCount = 1;
-            }
+            const count = await getMemberCount(trip.id);
+            trip.memberCount = count > 0 ? count : 1;
           } catch (_) {
             trip.memberCount = 1;
           }
         }
 
-        // Sort newest trips first
-        allTrips.sort((a, b) => new Date(b.created_at || b.start_date || 0) - new Date(a.created_at || a.start_date || 0));
+        allTrips.sort((a, b) => new Date(b.created_at?.seconds ? b.created_at.seconds * 1000 : b.created_at || 0) - new Date(a.created_at?.seconds ? a.created_at.seconds * 1000 : a.created_at || 0));
         setTrips(allTrips);
       } catch (err) {
         console.error('Error fetching dashboard trips:', err);
@@ -133,42 +103,22 @@ function DashboardContent() {
   const handleJoinTrip = async (e) => {
     e?.preventDefault();
     const cleanCode = inviteCode.trim().toUpperCase();
-    if (!cleanCode) {
-      toast.error('Please enter an invite code.');
-      return;
-    }
+    if (!cleanCode) { toast.error('Please enter an invite code.'); return; }
 
     setJoining(true);
     try {
-      // 1. Search in Supabase trips table by invite_code
       let foundTrip = null;
-      const { data } = await supabase
-        .from('trips')
-        .select('*')
-        .ilike('invite_code', cleanCode)
-        .maybeSingle();
 
-      if (data) {
-        foundTrip = data;
-      } else {
-        // Fallback check: if code is TOKYO26 or similar, find by title or code
-        if (cleanCode === 'TOKYO26') {
-          const { data: tokyoTrip } = await supabase
-            .from('trips')
-            .select('*')
-            .ilike('title', '%tokyo%')
-            .maybeSingle();
-          if (tokyoTrip) foundTrip = tokyoTrip;
-        }
+      // 1. Search Firestore by invite_code
+      try { foundTrip = await getTripByInviteCode(cleanCode); } catch (_) {}
 
-        // Also check localStorage user_trips
-        if (!foundTrip && typeof window !== 'undefined') {
-          try {
-            const stored = JSON.parse(localStorage.getItem('user_trips') || '[]');
-            const match = stored.find(t => (t.invite_code || '').toUpperCase() === cleanCode);
-            if (match) foundTrip = match;
-          } catch (_) {}
-        }
+      // 2. Fallback to localStorage
+      if (!foundTrip && typeof window !== 'undefined') {
+        try {
+          const stored = JSON.parse(localStorage.getItem('user_trips') || '[]');
+          const match = stored.find(t => (t.invite_code || '').toUpperCase() === cleanCode);
+          if (match) foundTrip = match;
+        } catch (_) {}
       }
 
       if (!foundTrip) {
@@ -177,18 +127,15 @@ function DashboardContent() {
         return;
       }
 
-      // 2. Add user to trip_members if authenticated
-      if (user && !user.email?.includes('demo')) {
+      // 3. Add user as member in Firestore
+      const uid = user?.uid || user?.id;
+      if (uid && !user?.email?.includes('demo')) {
         try {
-          await supabase.from('trip_members').upsert({
-            trip_id: foundTrip.id,
-            user_id: user.id,
-            role: 'member',
-          }, { onConflict: 'trip_id,user_id' });
+          await addTripMember(foundTrip.id, uid, { role: 'member' });
         } catch (_) {}
       }
 
-      // 3. Stash in localStorage user_trips so it persists locally
+      // 4. Persist locally
       if (typeof window !== 'undefined') {
         try {
           const stored = JSON.parse(localStorage.getItem('user_trips') || '[]');
@@ -210,20 +157,13 @@ function DashboardContent() {
     }
   };
 
-  const handleClearTrips = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('user_trips');
-      setTrips([]);
-    }
-  };
-
   if (authLoading || loading) {
     return (
       <div className={styles.wrapper}>
         <Navbar />
         <div className="container" style={{ paddingTop: 40 }}>
           <div className={styles.grid}>
-            {[1,2,3].map(i => <div key={i} className="skeleton" style={{ height: 200, borderRadius: 12 }} />)}
+            {[1, 2, 3].map(i => <div key={i} className="skeleton" style={{ height: 200, borderRadius: 12 }} />)}
           </div>
         </div>
       </div>
@@ -242,11 +182,7 @@ function DashboardContent() {
             </p>
           </div>
           <div className={styles.headerActions}>
-            <button
-              type="button"
-              onClick={() => setShowJoinModal(true)}
-              className="btn btn-secondary"
-            >
+            <button type="button" onClick={() => setShowJoinModal(true)} className="btn btn-secondary">
               <KeyRound size={16} /> Join Trip
             </button>
             <Link href="/trip/create" className="btn btn-primary">
@@ -299,18 +235,13 @@ function DashboardContent() {
             <div className={styles.modal} onClick={e => e.stopPropagation()}>
               <div className={styles.modalHeader}>
                 <h2><KeyRound size={20} color="var(--accent)" /> Join a Trip</h2>
-                <button
-                  type="button"
-                  className={styles.closeBtn}
-                  onClick={() => !joining && setShowJoinModal(false)}
-                  aria-label="Close"
-                >
+                <button type="button" className={styles.closeBtn} onClick={() => !joining && setShowJoinModal(false)} aria-label="Close">
                   <X size={18} />
                 </button>
               </div>
               <form onSubmit={handleJoinTrip} className={styles.modalBody}>
                 <p className={styles.modalDesc}>
-                  Enter the invite code (e.g. <strong>TOKYO26</strong>) shared by your trip organizer to access the itinerary, group budget, and live disruption alerts.
+                  Enter the invite code (e.g. <strong>TOKYO26</strong>) shared by your trip organizer.
                 </p>
                 <input
                   type="text"
@@ -323,21 +254,10 @@ function DashboardContent() {
                   disabled={joining}
                 />
                 <div className={styles.modalActions}>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    style={{ flex: 1 }}
-                    onClick={() => setShowJoinModal(false)}
-                    disabled={joining}
-                  >
+                  <button type="button" className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setShowJoinModal(false)} disabled={joining}>
                     Cancel
                   </button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    style={{ flex: 1 }}
-                    disabled={joining || !inviteCode.trim()}
-                  >
+                  <button type="submit" className="btn btn-primary" style={{ flex: 1 }} disabled={joining || !inviteCode.trim()}>
                     {joining ? 'Joining...' : 'Join Trip'}
                   </button>
                 </div>

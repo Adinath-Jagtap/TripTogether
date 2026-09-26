@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Plane, Building2, Car, Compass, Calendar, DollarSign, Shield, Users, Plus, AlertTriangle, Zap } from 'lucide-react';
 import { formatCurrency, formatTime, formatDateShort, getResilienceColor, getResilienceLabel, BOOKING_TYPES } from '@/lib/utils';
+import { getBookings, getExpenses } from '@/lib/firebase/firestore';
 import styles from './page.module.css';
 
 const TypeIcon = ({ type, size = 16 }) => {
@@ -14,7 +15,7 @@ const TypeIcon = ({ type, size = 16 }) => {
 };
 
 export default function TripOverview() {
-  const { trip, members, supabase } = useTrip();
+  const { trip, members } = useTrip();
   const { id } = useParams();
   const [bookings, setBookings] = useState([]);
   const [expenses, setExpenses] = useState([]);
@@ -22,10 +23,12 @@ export default function TripOverview() {
 
   useEffect(() => {
     const load = async () => {
-      const { data: b } = await supabase.from('bookings').select('*').eq('trip_id', id).order('start_datetime', { ascending: true });
-      setBookings(b || []);
-      const { data: e } = await supabase.from('expenses').select('*').eq('trip_id', id);
-      setExpenses(e || []);
+      try {
+        const b = await getBookings(id);
+        setBookings(b || []);
+        const e = await getExpenses(id);
+        setExpenses(e || []);
+      } catch (_) {}
       setLoading(false);
     };
     load();
@@ -39,7 +42,7 @@ export default function TripOverview() {
   if (loading) {
     return (
       <div className="grid-4">
-        {[1,2,3,4].map(i => <div key={i} className="skeleton" style={{ height: 100, borderRadius: 12 }} />)}
+        {[1, 2, 3, 4].map(i => <div key={i} className="skeleton" style={{ height: 100, borderRadius: 12 }} />)}
       </div>
     );
   }

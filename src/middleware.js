@@ -1,55 +1,32 @@
-import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
-  let supabaseResponse = NextResponse.next({ request });
+  const { pathname } = request.nextUrl;
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !key) {
-    // If env vars are not yet configured (e.g. initial setup / demo), permit navigation
-    return supabaseResponse;
-  }
-
-  const supabase = createServerClient(
-    url,
-    key,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
-
-  const { data: { user } } = await supabase.auth.getUser();
   const isDemo = request.cookies.get('demo_user')?.value === 'true';
 
   const protectedPaths = ['/dashboard', '/trip', '/profile'];
-  const isProtected = protectedPaths.some(p => request.nextUrl.pathname.startsWith(p));
+  const isProtected = protectedPaths.some(p => pathname.startsWith(p));
+  const isAuth = pathname.startsWith('/auth');
 
-  if (isProtected && !user && !isDemo) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/auth/login';
-    return NextResponse.redirect(url);
+  // Firebase Auth is fully client-side; the middleware only gates on the demo cookie.
+  // Real Firebase session validation happens client-side via onAuthStateChanged.
+  // For server-side protection we rely on the demo cookie; authenticated users
+  // are redirected by the AuthContext on the client if not logged in.
+
+  if (isProtected && !isDemo) {
+    // Allow the request through — client-side auth guard will redirect if needed.
+    // This avoids breaking Firebase Auth which doesn't use server-side cookies by default.
+    return NextResponse.next();
   }
 
-  if ((user || isDemo) && request.nextUrl.pathname.startsWith('/auth')) {
+  if (isDemo && isAuth) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }
 
-  return supabaseResponse;
+  return NextResponse.next();
 }
 
 export const config = {

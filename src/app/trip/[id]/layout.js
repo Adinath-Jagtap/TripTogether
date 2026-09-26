@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ToastProvider } from '@/context/ToastContext';
 import Navbar from '@/components/layout/Navbar';
-import { MapPin, Calendar, Shield, Users, Copy, Check } from 'lucide-react';
+import { MapPin, Calendar, Shield, Copy, Check } from 'lucide-react';
 import { formatDateRange, getResilienceColor, getInitials, getAvatarColor } from '@/lib/utils';
+import { getTrip, getTripMembers, getProfile } from '@/lib/firebase/firestore';
 import styles from './layout.module.css';
 
 // Trip context so child pages can access trip data without refetching
@@ -16,22 +17,28 @@ export const useTrip = () => useContext(TripContext);
 function TripLayoutContent({ children }) {
   const { id } = useParams();
   const pathname = usePathname();
-  const { user, supabase } = useAuth();
+  const { user } = useAuth();
   const [trip, setTrip] = useState(null);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const fetchTrip = async () => {
-    let { data } = await supabase.from('trips').select('*').eq('id', id).maybeSingle();
-    if (!data && typeof window !== 'undefined') {
+    // 1. Try Firestore
+    let tripData = null;
+    try { tripData = await getTrip(id); } catch (_) {}
+
+    // 2. Fallback to localStorage cache
+    if (!tripData && typeof window !== 'undefined') {
       try {
         const cached = localStorage.getItem('cached_trip_' + id);
-        if (cached) data = JSON.parse(cached);
+        if (cached) tripData = JSON.parse(cached);
       } catch (_) {}
     }
-    if (!data && id === 'a0000000-0000-0000-0000-000000000001') {
-      data = {
+
+    // 3. Demo trip fallback
+    if (!tripData && id === 'a0000000-0000-0000-0000-000000000001') {
+      tripData = {
         id: 'a0000000-0000-0000-0000-000000000001',
         title: 'Tokyo Cherry Blossom & Mount Fuji Odyssey',
         destination: 'Tokyo',
@@ -46,33 +53,25 @@ function TripLayoutContent({ children }) {
         resilience_score: 92,
       };
     }
-    setTrip(data);
+    setTrip(tripData);
 
-    // Fetch members with profiles
-    const { data: mems } = await supabase
-      .from('trip_members')
-      .select('*, profiles(*)')
-      .eq('trip_id', id);
-
+    // Fetch members
     let memberList = [];
-    if (data?.owner_id) {
-      const { data: ownerProfile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', data.owner_id)
-        .maybeSingle();
-      if (ownerProfile) memberList.push({ ...ownerProfile, role: 'owner' });
-    }
-    if (mems) {
+    try {
+      const mems = await getTripMembers(id);
       for (const m of mems) {
-        if (m.user_id !== data?.owner_id && m.profiles) {
-          memberList.push({ ...m.profiles, role: m.role });
+        try {
+          const p = await getProfile(m.user_id || m.id);
+          if (p) memberList.push({ ...p, role: m.role });
+        } catch (_) {
+          memberList.push({ id: m.user_id || m.id, full_name: m.full_name || 'Member', role: m.role });
         }
       }
-    }
+    } catch (_) {}
+
     if (memberList.length === 0) {
-      const currentUserId = user?.id || data?.owner_id || 'd0000000-0000-0000-0000-000000000001';
-      const currentUserName = user?.user_metadata?.full_name || 'Adinath (You)';
+      const currentUserId = user?.uid || user?.id || tripData?.owner_id || 'd0000000-0000-0000-0000-000000000001';
+      const currentUserName = user?.displayName || user?.user_metadata?.full_name || 'Adinath (You)';
       memberList = [
         { id: currentUserId, full_name: currentUserName, role: 'owner' },
         { id: 'd0000000-0000-0000-0000-000000000002', full_name: 'Priya Sharma', role: 'member' },
@@ -128,7 +127,7 @@ function TripLayoutContent({ children }) {
   }
 
   return (
-    <TripContext.Provider value={{ trip, members, setTrip, setMembers, fetchTrip, supabase, user }}>
+    <TripContext.Provider value={{ trip, members, setTrip, setMembers, fetchTrip, user }}>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Navbar />
 

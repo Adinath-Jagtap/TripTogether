@@ -4,13 +4,14 @@ import { useTrip } from '../layout';
 import { useToast } from '@/context/ToastContext';
 import { Copy, Check, Trash2, Crown, Shield, User } from 'lucide-react';
 import { getInitials, getAvatarColor } from '@/lib/utils';
+import { removeTripMember } from '@/lib/firebase/firestore';
 
 export default function MembersPage() {
-  const { trip, members, supabase, user, fetchTrip } = useTrip();
+  const { trip, members, user, fetchTrip } = useTrip();
   const toast = useToast();
   const [copied, setCopied] = useState(false);
 
-  const isOwner = trip?.owner_id === user?.id;
+  const isOwner = trip?.owner_id === (user?.uid || user?.id);
 
   const copyCode = () => {
     navigator.clipboard.writeText(trip?.invite_code);
@@ -19,11 +20,15 @@ export default function MembersPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const removeMember = async (memberId) => {
+  const handleRemoveMember = async (memberId) => {
     if (!confirm('Remove this member?')) return;
-    await supabase.from('trip_members').delete().match({ trip_id: trip.id, user_id: memberId });
-    toast.success('Member removed');
-    fetchTrip();
+    try {
+      await removeTripMember(trip.id, memberId);
+      toast.success('Member removed');
+      fetchTrip();
+    } catch (err) {
+      toast.error('Failed to remove member');
+    }
   };
 
   const roleIcon = (role) => {
@@ -69,8 +74,8 @@ export default function MembersPage() {
             <span className={`badge ${m.role === 'owner' ? 'badge-accent' : m.role === 'admin' ? 'badge-info' : 'badge-neutral'}`}>
               {m.role}
             </span>
-            {isOwner && m.id !== user?.id && (
-              <button className="btn btn-ghost btn-icon btn-sm" onClick={() => removeMember(m.id)}>
+            {isOwner && m.id !== (user?.uid || user?.id) && (
+              <button className="btn btn-ghost btn-icon btn-sm" onClick={() => handleRemoveMember(m.id)}>
                 <Trash2 size={14} />
               </button>
             )}

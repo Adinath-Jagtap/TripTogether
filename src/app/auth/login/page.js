@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ToastProvider, useToast } from '@/context/ToastContext';
 import Navbar from '@/components/layout/Navbar';
@@ -17,25 +16,28 @@ function LoginForm() {
   const [error, setError] = useState('');
   const router = useRouter();
   const toast = useToast();
-  const { loginAsDemo, supabase } = useAuth();
+  const { signIn, loginAsDemo, signInWithGoogle } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password });
-    if (err) {
-      if (email.toLowerCase().includes('demo')) {
-        loginAsDemo();
-        toast.success('Signed in as Demo Traveler!');
-        router.push('/dashboard');
-        return;
-      }
-      setError(err.message);
-      setLoading(false);
-    } else {
+
+    // Demo login shortcut
+    if (email.toLowerCase().includes('demo')) {
+      loginAsDemo();
+      toast.success('Welcome to Demo Mode!');
+      router.push('/dashboard');
+      return;
+    }
+
+    try {
+      await signIn(email, password);
       toast.success('Welcome back!');
       router.push('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Invalid email or password');
+      setLoading(false);
     }
   };
 
@@ -46,10 +48,13 @@ function LoginForm() {
   };
 
   const handleGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
+    try {
+      await signInWithGoogle();
+      toast.success('Signed in with Google!');
+      router.push('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Google sign-in failed');
+    }
   };
 
   return (

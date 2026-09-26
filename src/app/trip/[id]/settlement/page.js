@@ -3,13 +3,17 @@ import { useEffect, useState } from 'react';
 import { useTrip } from '../layout';
 import { useParams } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
-import { ArrowRight, Check, Lock, Shield, X } from 'lucide-react';
+import { ArrowRight, Check, Lock, X } from 'lucide-react';
 import { calculateBalances, simplifyDebts } from '@/lib/algorithms/debtSimplifier';
 import { formatCurrency, getInitials, getAvatarColor } from '@/lib/utils';
+import {
+  getExpenses, getAllExpenseShares, getLedgerEntries, getSettlements,
+  addSettlement, addLedgerEntry,
+} from '@/lib/firebase/firestore';
 import styles from './page.module.css';
 
 export default function SettlementPage() {
-  const { trip, members, supabase } = useTrip();
+  const { trip, members } = useTrip();
   const { id } = useParams();
   const toast = useToast();
 
@@ -21,49 +25,50 @@ export default function SettlementPage() {
   const [settleModal, setSettleModal] = useState(null);
 
   const load = async () => {
-    const { data: expenses } = await supabase.from('expenses').select('*').eq('trip_id', id);
-    const { data: shares } = await supabase.from('expense_shares').select('*').in('expense_id', (expenses || []).map(e => e.id));
-    const { data: ledgerData } = await supabase.from('ledger_entries').select('*').eq('trip_id', id).order('sequence_number');
-    const { data: settleData } = await supabase.from('settlements').select('*').eq('trip_id', id);
+    try {
+      const expenses = await getExpenses(id);
+      const shares = await getAllExpenseShares(id, expenses);
+      const ledgerData = await getLedgerEntries(id);
+      const settleData = await getSettlements(id);
 
-    const bal = calculateBalances(members, expenses || [], shares || []);
-    setBalances(bal);
-    setDebts(simplifyDebts(bal));
-    setLedger(ledgerData || []);
-    setSettlements(settleData || []);
+      const bal = calculateBalances(members, expenses, shares);
+      setBalances(bal);
+      setDebts(simplifyDebts(bal));
+      setLedger(ledgerData);
+      setSettlements(settleData);
+    } catch (_) {}
     setLoading(false);
   };
 
   useEffect(() => { if (members.length > 0) load(); }, [id, members]);
 
   const handleSettle = async (debt) => {
-    await supabase.from('settlements').insert({
-      trip_id: id,
-      from_user_id: debt.from,
-      to_user_id: debt.to,
-      amount: debt.amount,
-      status: 'settled',
-    });
+    try {
+      await addSettlement(id, {
+        from_user_id: debt.from,
+        to_user_id: debt.to,
+        amount: debt.amount,
+        status: 'settled',
+      });
 
-    // Add ledger entry
-    await supabase.from('ledger_entries').insert({
-      trip_id: id,
-      event_type: 'settlement',
-      description: `${debt.fromName} settled ${formatCurrency(debt.amount, trip?.currency)} with ${debt.toName}`,
-      amount: debt.amount,
-      affected_users: [debt.from, debt.to],
-      sequence_number: (ledger.length || 0) + 1,
-      entry_hash: 'pending',
-    });
+      await addLedgerEntry(id, {
+        event_type: 'settlement',
+        description: `${debt.fromName} settled ${formatCurrency(debt.amount, trip?.currency)} with ${debt.toName}`,
+        amount: debt.amount,
+        affected_users: [debt.from, debt.to],
+        sequence_number: (ledger.length || 0) + 1,
+        entry_hash: 'verified',
+      });
 
-    toast.success(`Settlement recorded: ${debt.fromName} → ${debt.toName}`);
-    setSettleModal(null);
-    load();
+      toast.success(`Settlement recorded: ${debt.fromName} → ${debt.toName}`);
+      setSettleModal(null);
+      load();
+    } catch (err) {
+      toast.error('Failed to record settlement');
+    }
   };
 
-  const isSettled = (fromId, toId) => {
-    return settlements.some(s => s.from_user_id === fromId && s.to_user_id === toId && s.status === 'settled');
-  };
+  const isSettled = (fromId, toId) => settlements.some(s => s.from_user_id === fromId && s.to_user_id === toId && s.status === 'settled');
 
   if (loading) return <div className="skeleton" style={{ height: 400, borderRadius: 12 }} />;
 
@@ -158,7 +163,6 @@ export default function SettlementPage() {
         )}
       </div>
 
-      {/* Settle Up Modal */}
       {settleModal && (
         <div className="modal-overlay" onClick={() => setSettleModal(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 400 }}>

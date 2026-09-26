@@ -5,23 +5,13 @@ import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ToastProvider, useToast } from '@/context/ToastContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import {
-  User,
-  Mail,
-  ShieldCheck,
-  Compass,
-  CreditCard,
-  LogOut,
-  Save,
-  Settings,
-  Bell,
-  CheckCircle2,
-} from 'lucide-react';
+import { User, Mail, ShieldCheck, Compass, CreditCard, LogOut, Save, Settings, CheckCircle2 } from 'lucide-react';
 import { getInitials } from '@/lib/utils';
+import { getProfile, upsertProfile, getUserTrips } from '@/lib/firebase/firestore';
 import styles from './page.module.css';
 
 function ProfileContent() {
-  const { user, profile, supabase, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const toast = useToast();
   const router = useRouter();
 
@@ -34,23 +24,20 @@ function ProfileContent() {
 
   useEffect(() => {
     if (user) {
-      setFullName(profile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Traveler');
+      setFullName(profile?.full_name || user.displayName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Traveler');
       loadStats();
     }
   }, [user, profile]);
 
   const loadStats = async () => {
-    if (!supabase || !user) return;
+    if (!user) return;
+    const uid = user.uid || user.id;
     try {
-      const { data: memberTrips } = await supabase
-        .from('trip_members')
-        .select('trip_id, trips(status, resilience_score)')
-        .eq('user_id', user.id);
-
-      if (memberTrips && memberTrips.length > 0) {
-        const total = memberTrips.length;
-        const active = memberTrips.filter(t => t.trips?.status !== 'completed').length;
-        const scores = memberTrips.map(t => t.trips?.resilience_score || 85);
+      const trips = await getUserTrips(uid);
+      if (trips && trips.length > 0) {
+        const total = trips.length;
+        const active = trips.filter(t => t.status !== 'completed').length;
+        const scores = trips.map(t => t.resilience_score || 85);
         const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
         setStats({ totalTrips: total, activeTrips: active, resilienceAvg: avg });
       } else {
@@ -64,12 +51,9 @@ function ProfileContent() {
   const handleSave = async () => {
     try {
       setSaving(true);
-      if (supabase && user) {
-        await supabase.from('profiles').upsert({
-          id: user.id,
-          full_name: fullName,
-          email: user.email,
-        });
+      const uid = user?.uid || user?.id;
+      if (uid) {
+        await upsertProfile(uid, { full_name: fullName, email: user.email });
       }
       toast.success('Profile preferences updated successfully!');
     } catch (err) {
@@ -106,43 +90,29 @@ function ProfileContent() {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="btn-secondary"
-              style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--color-danger)' }}
-            >
-              <LogOut size={16} />
-              <span>Sign Out</span>
+            <button type="button" onClick={handleSignOut} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--color-danger)' }}>
+              <LogOut size={16} /><span>Sign Out</span>
             </button>
           </div>
 
           {/* Stats Summary */}
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <Compass size={22} />
-              </div>
+              <div className={styles.statIcon}><Compass size={22} /></div>
               <div>
                 <div className={styles.statValue}>{stats.totalTrips}</div>
                 <div className={styles.statLabel}>Total Trips Planned</div>
               </div>
             </div>
-
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <ShieldCheck size={22} />
-              </div>
+              <div className={styles.statIcon}><ShieldCheck size={22} /></div>
               <div>
                 <div className={styles.statValue}>{stats.resilienceAvg}%</div>
                 <div className={styles.statLabel}>Avg Itinerary Resilience</div>
               </div>
             </div>
-
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <CreditCard size={22} />
-              </div>
+              <div className={styles.statIcon}><CreditCard size={22} /></div>
               <div>
                 <div className={styles.statValue}>100%</div>
                 <div className={styles.statLabel}>Ledger Integrity Score</div>
@@ -153,99 +123,51 @@ function ProfileContent() {
           {/* Personal Settings */}
           <div className={styles.section}>
             <div className={styles.sectionTitle}>
-              <User size={18} color="var(--color-primary)" />
-              <span>Personal Information</span>
+              <User size={18} color="var(--color-primary)" /><span>Personal Information</span>
             </div>
-
             <div className="form-group">
               <label className="form-label">Display Name</label>
-              <input
-                type="text"
-                className="form-input"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Adinath Sharma"
-              />
+              <input type="text" className="form-input" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Adinath Sharma" />
             </div>
-
             <div className="form-group">
               <label className="form-label">Email Address</label>
-              <input
-                type="email"
-                className="form-input"
-                value={user?.email || 'adinath@example.com'}
-                disabled
-                style={{ opacity: 0.7 }}
-              />
+              <input type="email" className="form-input" value={user?.email || 'adinath@example.com'} disabled style={{ opacity: 0.7 }} />
             </div>
           </div>
 
           {/* Preferences */}
           <div className={styles.section}>
             <div className={styles.sectionTitle}>
-              <Settings size={18} color="var(--color-primary)" />
-              <span>Travel & Financial Preferences</span>
+              <Settings size={18} color="var(--color-primary)" /><span>Travel &amp; Financial Preferences</span>
             </div>
-
             <div className={styles.settingsRow}>
               <div className={styles.settingMeta}>
                 <span className={styles.settingTitle}>Default Currency</span>
-                <span className={styles.settingDesc}>
-                  Used for calculating expense shares and recovery plan estimates.
-                </span>
+                <span className={styles.settingDesc}>Used for calculating expense shares and recovery plan estimates.</span>
               </div>
-              <select
-                className="form-input form-select"
-                value={preferredCurrency}
-                onChange={(e) => setPreferredCurrency(e.target.value)}
-                style={{ width: 140 }}
-              >
+              <select className="form-input form-select" value={preferredCurrency} onChange={e => setPreferredCurrency(e.target.value)} style={{ width: 140 }}>
                 <option value="INR">INR (₹)</option>
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
               </select>
             </div>
-
             <div className={styles.settingsRow}>
               <div className={styles.settingMeta}>
                 <span className={styles.settingTitle}>Real-time Disruption Alerts</span>
-                <span className={styles.settingDesc}>
-                  Receive instantaneous AI push alerts when flights or transfers cascade.
-                </span>
+                <span className={styles.settingDesc}>Receive instantaneous AI push alerts when flights or transfers cascade.</span>
               </div>
-              <input
-                type="checkbox"
-                checked={notifyDisruptions}
-                onChange={(e) => setNotifyDisruptions(e.target.checked)}
-                style={{ width: 18, height: 18, accentColor: 'var(--color-primary)' }}
-              />
+              <input type="checkbox" checked={notifyDisruptions} onChange={e => setNotifyDisruptions(e.target.checked)} style={{ width: 18, height: 18, accentColor: 'var(--color-primary)' }} />
             </div>
-
             <div className={styles.settingsRow}>
               <div className={styles.settingMeta}>
                 <span className={styles.settingTitle}>Audit Trail Ledger Notifications</span>
-                <span className={styles.settingDesc}>
-                  Notify when a new tamper-evident cryptographic block is appended.
-                </span>
+                <span className={styles.settingDesc}>Notify when a new cryptographic block is appended.</span>
               </div>
-              <input
-                type="checkbox"
-                checked={notifyLedger}
-                onChange={(e) => setNotifyLedger(e.target.checked)}
-                style={{ width: 18, height: 18, accentColor: 'var(--color-primary)' }}
-              />
+              <input type="checkbox" checked={notifyLedger} onChange={e => setNotifyLedger(e.target.checked)} style={{ width: 18, height: 18, accentColor: 'var(--color-primary)' }} />
             </div>
-
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={saving}
-                className="btn-primary"
-                style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-              >
-                <Save size={16} />
-                <span>{saving ? 'Saving...' : 'Save Preferences'}</span>
+              <button type="button" onClick={handleSave} disabled={saving} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Save size={16} /><span>{saving ? 'Saving...' : 'Save Preferences'}</span>
               </button>
             </div>
           </div>

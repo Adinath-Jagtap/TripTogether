@@ -2,8 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import { AuthProvider } from '@/context/AuthContext';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ToastProvider, useToast } from '@/context/ToastContext';
 import Navbar from '@/components/layout/Navbar';
 import { Mail, Lock, Eye, EyeOff, User, MapPin } from 'lucide-react';
@@ -19,7 +18,7 @@ function RegisterForm() {
   const [error, setError] = useState('');
   const router = useRouter();
   const toast = useToast();
-  const supabase = createClient();
+  const { signUp, signInWithGoogle } = useAuth();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -28,26 +27,24 @@ function RegisterForm() {
     if (password.length < 6) { setError('Password must be at least 6 characters'); return; }
     setLoading(true);
 
-    const { error: err } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: name } },
-    });
-
-    if (err) {
-      setError(err.message);
-      setLoading(false);
-    } else {
+    try {
+      await signUp(email, password, name);
       toast.success('Account created! Welcome to TripTogether.');
       router.push('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Failed to create account');
+      setLoading(false);
     }
   };
 
   const handleGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
+    try {
+      await signInWithGoogle();
+      toast.success('Signed in with Google!');
+      router.push('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Google sign-in failed');
+    }
   };
 
   return (
