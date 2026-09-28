@@ -4,7 +4,7 @@
  */
 
 const NUGEN_BASE_URL = 'https://api.nugen.in/api/v3';
-const NUGEN_API_KEY = process.env.NUGEN_API_KEY || 'nugen-b87ea2cb1d6bb56f';
+const NUGEN_API_KEY = process.env.NUGEN_API_KEY;
 
 /**
  * Discover base models on Nugen Platform
