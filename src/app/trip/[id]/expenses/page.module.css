@@ -1,0 +1,236 @@
+/* Expenses Page - Mobile First */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pageHeader h2 { margin: 0; }
+
+.subtext {
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+  margin-top: 2px;
+}
+
+.progressMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* Category Grid */
+.catGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.catCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+}
+
+.catIconWrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.catLabel {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.catAmount {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+/* Expense List */
+.expenseList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.expenseRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+  transition: box-shadow 0.15s ease;
+}
+
+.expenseRow:active {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.expIcon {
+  color: var(--accent);
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-light);
+  border-radius: 8px;
+}
+
+.expInfo { flex: 1; min-width: 0; }
+.expTitle { font-weight: 600; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.expMeta { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 2px; }
+
+.expRight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.expAmount { font-weight: 700; font-size: 0.9375rem; color: var(--text-primary); }
+
+/* Form Row */
+.formRow {
+  display: flex;
+  gap: 10px;
+}
+
+/* Participant Section */
+.participantSection {
+  background: var(--bg-subtle);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-default);
+}
+
+.participantHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.perPerson {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.participantChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.participantChip:active {
+  transform: scale(0.95);
+}
+
+.participantSelected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* Mobile Overrides */
+@media (max-width: 768px) {
+  .catGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .catCard {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .catIconWrap {
+    width: 28px;
+    height: 28px;
+  }
+
+  .filters {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filters select {
+    width: 100% !important;
+  }
+
+  .expenseRow {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .expIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .expTitle { font-size: 0.8125rem; }
+  .expAmount { font-size: 0.875rem; }
+
+  .formRow {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

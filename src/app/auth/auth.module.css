@@ -1,0 +1,100 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+}
+.container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--navbar-height, 56px) + 36px) 24px 40px;
+}
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+.header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.headerIcon { color: var(--accent); margin-bottom: 12px; }
+.header h2 {
+  margin-bottom: 4px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.header p { color: var(--text-tertiary); font-size: 0.875rem; }
+.form { display: flex; flex-direction: column; gap: 16px; }
+.inputWrap { position: relative; }
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+.pwToggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast);
+}
+.pwToggle:hover { color: var(--text-primary); }
+.inputWrap .form-input, .inputWrap input { width: 100%; }
+.error {
+  padding: 10px 14px;
+  background: var(--danger-light);
+  color: var(--danger);
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--text-tertiary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-default);
+}
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+.footer a { color: var(--accent); font-weight: 600; }
+.footer a:hover { text-decoration: underline; }
+
+@media (max-width: 480px) {
+  .container {
+    padding: calc(var(--navbar-height, 48px) + 16px) 16px 20px;
+  }
+  .card {
+    padding: 28px 20px;
+    border-radius: var(--radius-xl) !important;
+  }
+  .header {
+    margin-bottom: 20px;
+  }
+}

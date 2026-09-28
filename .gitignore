@@ -1,0 +1,16 @@
+node_modules/
+.next/
+.vercel/
+.env.local
+.env
+.env*.local
+out/
+*.log
+.DS_Store
+Thumbs.db
+*.traineddata
+eng.traineddata
+firebase.rules
+
+# Auto-generated files (built from env vars — never commit these)
+public/firebase-messaging-sw.js

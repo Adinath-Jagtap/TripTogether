@@ -1,0 +1,509 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* High-End Itinerary Composition Card */
+.compositionCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.compositionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.compositionTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.01em;
+}
+
+.compositionMeta {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-default);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* Multi-Segmented Proportional Bar */
+.segmentedTrack {
+  display: flex;
+  height: 8px;
+  width: 100%;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--bg-muted);
+  gap: 2px;
+}
+
+.segmentItem {
+  height: 100%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 2px;
+}
+
+/* Uniform Micro Legend Chips */
+.compositionLegend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.legendChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-default);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.dotIndicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Visual Meters & Stats Grid */
+.visualGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+.meterCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+.meterCard:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.meterHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  width: 100%;
+}
+
+.meterLabel {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+}
+
+.meterValue {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-top: 2px;
+  word-break: break-word;
+  letter-spacing: -0.02em;
+}
+
+.meterSubValue {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+.percentBadge {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.progressTrack {
+  height: 8px;
+  background: var(--bg-muted);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.meterFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-default);
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: 500;
+}
+
+/* Circular SVG Gauge for Resilience */
+.ringGauge {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.circularSvg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.ringBg {
+  fill: none;
+  stroke: var(--bg-muted);
+  stroke-width: 3.5;
+}
+
+.ringFill {
+  fill: none;
+  stroke-width: 3.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.8s ease;
+}
+
+.shieldCenterIcon {
+  position: absolute;
+}
+
+.resilienceSubText {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  color: var(--success);
+  font-weight: 700;
+  background: var(--success-light);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #A7F3D0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Two Column Layout */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.linkButton {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+.linkButton:hover { opacity: 0.75; }
+
+.upcomingCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.upcomingCard:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.upcomingIconBox {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.upcomingContent {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.upcomingTitleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.upcomingTitle {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.upcomingCost {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.upcomingMeta {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.badgeCol {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.atRiskCard {
+  background: var(--accent-subtle);
+  border: 1px solid #FDE68A;
+  border-left: 4px solid #F59E0B;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Quick Action Grid */
+.quickActionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.quickActionButton {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-xs);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.quickActionButton:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.quickActionIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quickActionTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.quickActionSub {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .container {
+    gap: 14px;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .visualGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+  .meterCard {
+    padding: 14px 14px;
+    gap: 10px;
+  }
+  .meterHeader {
+    gap: 8px;
+  }
+  .meterValue {
+    font-size: 1.25rem;
+  }
+  .meterSubValue {
+    font-size: 0.75rem;
+  }
+  .percentBadge {
+    font-size: 0.625rem;
+    padding: 3px 8px;
+  }
+  .meterFooter {
+    font-size: 0.625rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .twoCol {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .quickActionGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+  }
+  .compositionCard {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .compositionMeta {
+    font-size: 0.625rem;
+    padding: 2px 8px;
+  }
+  .legendChip {
+    font-size: 0.625rem;
+    padding: 3px 8px;
+  }
+  .upcomingCard {
+    padding: 10px;
+  }
+  .atRiskCard {
+    padding: 12px;
+  }
+  .quickActionButton {
+    padding: 12px;
+    border-radius: var(--radius-md);
+  }
+}

@@ -1,0 +1,207 @@
+/* ── Scroll-Driven Video Hero ─────────────────────── */
+.heroScrollTrack {
+  position: relative;
+  height: 400vh;
+  width: 100%;
+}
+
+.heroFixedContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.heroUnpinned {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+}
+
+.heroVideoBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 0;
+  will-change: contents;
+}
+
+.heroContentContainer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroCtas {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px 20px;
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.heroCtas a {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Problem Section */
+.problemSection {
+  padding: 80px 0 60px;
+  background: var(--bg-subtle);
+  position: relative;
+  z-index: 20;
+}
+
+.problemGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.problemCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px !important;
+}
+
+.problemCard h3 { font-size: 1.0625rem; }
+.problemCard p { font-size: 0.875rem; line-height: 1.6; }
+
+.problemIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Features Section */
+.featuresSection { padding: 80px 0; position: relative; z-index: 20; background: #FFFFFF; }
+.sectionHeader { text-align: center; margin-bottom: 48px; }
+.sectionHeader h2 { margin-bottom: 8px; font-size: 1.75rem; letter-spacing: -0.03em; }
+.sectionHeader p { color: var(--text-tertiary); font-size: 0.9375rem; }
+.featuresGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.featureCard h3 { font-size: 1rem; font-weight: 700; }
+.featureCard p { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; }
+
+.featureIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--accent-gradient-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* How It Works Section */
+.howSection { padding: 80px 0; background: var(--bg-subtle); position: relative; z-index: 20; }
+.stepsGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: step; }
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+}
+
+.step h3 { font-size: 0.9375rem; font-weight: 700; }
+.step p { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; }
+
+.stepNum {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+/* CTA Section */
+.ctaSection { padding: 80px 0; position: relative; z-index: 20; background: #FFFFFF; }
+
+.ctaCard {
+  text-align: center;
+  padding: 64px 32px;
+  background: var(--accent-gradient);
+  border: none;
+  border-radius: var(--radius-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 12px 40px rgba(217, 119, 6, 0.18);
+}
+
+.ctaCard h2 { font-size: 1.75rem; color: #ffffff; }
+.ctaCard p { color: rgba(255, 255, 255, 0.85); max-width: 420px; }
+
+.ctaCard .btn-primary {
+  background: #ffffff !important;
+  color: var(--accent-hover) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border: none;
+}
+
+.ctaCard .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl) !important;
+}
+
+@media (max-width: 768px) {
+  .heroScrollTrack { height: 300vh; }
+  .heroStickyContainer { padding-bottom: 40px; }
+  .heroCtas { flex-direction: column; width: 100%; border-radius: 20px; padding: 10px; }
+  .heroCtas a { width: 100%; justify-content: center; }
+  .problemGrid, .featuresGrid { grid-template-columns: 1fr; }
+  .stepsGrid { grid-template-columns: 1fr 1fr; }
+  .ctaCard { padding: 40px 24px; }
+  .ctaCard h2 { font-size: 1.375rem; }
+}
+
+@media (max-width: 480px) {
+  .stepsGrid { grid-template-columns: 1fr; }
+}

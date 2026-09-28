@@ -1,0 +1,402 @@
+.canvasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #FFFFFF;
+  border: 1px solid #E7E5E2;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #F0EFEA;
+}
+
+.badgeGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.itemCountBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: #FEF3C7;
+  color: #B45309;
+  border-radius: 9999px;
+}
+
+.resilienceBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: #ECFDF5;
+  color: #047857;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pendingBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.verifiedBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.passCheckNotice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.passCheckNoticeLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.passCheckChips {
+  display: flex;
+  gap: 6px;
+}
+
+.chip {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #065F46;
+  background: #ECFDF5;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(180, 83, 9, 0.2) transparent;
+}
+
+.cardList::-webkit-scrollbar {
+  width: 5px;
+}
+
+.cardList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cardList::-webkit-scrollbar-thumb {
+  background: rgba(180, 83, 9, 0.2);
+  border-radius: 3px;
+}
+
+.cardList::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 83, 9, 0.35);
+}
+
+.bookingCard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px;
+  background: #FAF9F7;
+  border: 1px solid #E7E5E2;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  gap: 12px;
+  animation: cardFloatIn 0.35s ease backwards;
+}
+
+@keyframes cardFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Type-specific card styles */
+.bookingCardFlight {
+  border-left: 3px solid #0284C7;
+  background: #FAFCFF;
+}
+
+.bookingCardHotel {
+  border-left: 3px solid #7C3AED;
+  background: #FDFAFF;
+}
+
+.bookingCardTrain {
+  border-left: 3px solid #D97706;
+  background: #FFFDFB;
+}
+
+.bookingCardActivity {
+  border-left: 3px solid #059669;
+  background: #F8FDFB;
+}
+
+.bookingCardTransfer {
+  border-left: 3px solid #6B7280;
+  background: #FAFAFA;
+}
+
+.bookingCard:hover {
+  border-color: #B45309;
+  background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cardMain {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+.typeIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  border: 1px solid #E7E5E2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B45309;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+/* Type-specific icon colors */
+.typeIconFlight {
+  color: #0284C7;
+  background: #F0F9FF;
+  border-color: #BAE6FD;
+}
+
+.typeIconHotel {
+  color: #7C3AED;
+  background: #F5F3FF;
+  border-color: #DDD6FE;
+}
+
+.typeIconTrain {
+  color: #D97706;
+  background: #FFFBEB;
+  border-color: #FDE68A;
+}
+
+.typeIconActivity {
+  color: #059669;
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+}
+
+.typeIconTransfer {
+  color: #6B7280;
+  background: #F9FAFB;
+  border-color: #E5E7EB;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.cardTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.cardMeta {
+  font-size: 0.75rem;
+  color: #737373;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cardExtra {
+  font-size: 0.6875rem;
+  color: #525252;
+  margin-top: 2px;
+}
+
+.cardRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.costTag {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #171717;
+}
+
+.dependencyLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  margin-left: 18px;
+  font-size: 0.6875rem;
+  color: #737373;
+  border-left: 2px dashed #D4D1CC;
+}
+
+.bottomAction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid #F0EFEA;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px 24px;
+  color: #737373;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  border: 2px dashed rgba(180, 83, 9, 0.15);
+  border-radius: 16px;
+  margin: 8px;
+  background: linear-gradient(180deg, #FFFDF9 0%, #FFFFFF 100%);
+}
+
+.emptyIconWrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: gentleFloat 3s ease-in-out infinite;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.12);
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@media (max-width: 640px) {
+  .canvasContainer {
+    padding: 14px 12px;
+    gap: 10px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .topBar {
+    padding-bottom: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .badgeGroup {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .passCheckNotice {
+    padding: 10px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .passCheckNoticeLeft {
+    gap: 8px;
+  }
+  .cardList {
+    max-height: 300px;
+    gap: 8px;
+  }
+  .bookingCard {
+    padding: 12px 10px;
+  }
+  .typeIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+  .cardTitle {
+    font-size: 0.8125rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  .cardMeta {
+    font-size: 0.6875rem;
+    gap: 6px;
+  }
+  .bottomAction {
+    padding-top: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .bottomAction button {
+    width: 100%;
+    justify-content: center;
+  }
+  .emptyState {
+    padding: 32px 16px;
+    margin: 4px;
+  }
+  .emptyIconWrap {
+    width: 52px;
+    height: 52px;
+  }
+}

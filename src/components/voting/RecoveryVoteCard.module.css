@@ -1,0 +1,206 @@
+.voteContainer {
+  margin-top: 24px;
+  padding: 20px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.voteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.titleBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.timerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  color: #92400E;
+  font-weight: 700;
+  font-size: 0.8125rem;
+}
+
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.planCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.planCard:hover {
+  border-color: var(--accent, #6366F1);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.08);
+}
+
+.recommendedCard {
+  border-color: #3B82F6;
+  background: linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 100%);
+}
+
+.selectedCard {
+  border-color: #10B981;
+  background: linear-gradient(180deg, #ECFDF5 0%, #FFFFFF 100%);
+  box-shadow: 0 0 0 2px #10B981;
+}
+
+.recBadge {
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  background: #2563EB;
+  color: #FFFFFF;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.planHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.planLabel {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.scoreBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #059669;
+  background: #D1FAE5;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.summary {
+  font-size: 0.8125rem;
+  color: #475569;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-bottom: 12px;
+  padding: 6px 8px;
+  background: #F8FAFC;
+  border-radius: 8px;
+}
+
+.voteActions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.voteBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1.5px solid #CBD5E1;
+  background: #FFFFFF;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.voteBtn:hover:not(:disabled) {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+.votedBtn {
+  background: #10B981;
+  border-color: #10B981;
+  color: #FFFFFF;
+}
+
+.overrideBtn {
+  padding: 6px 10px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: #FFFBEB;
+  border: 1px solid #FCD34D;
+  color: #B45309;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.overrideBtn:hover {
+  background: #FEF3C7;
+}
+
+.statusBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-top: 12px;
+}
+
+.statusOpen {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1E40AF;
+}
+
+.statusResolved {
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
+}

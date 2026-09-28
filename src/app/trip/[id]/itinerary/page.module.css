@@ -1,0 +1,866 @@
+.timeline { display: flex; flex-direction: column; gap: 24px; }
+.dayGroup { }
+.dayHeader { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border-default); }
+.dayNum { font-weight: 700; font-size: 0.9375rem; color: var(--text-primary); }
+.dayDate { font-size: 0.75rem; color: var(--text-tertiary); }
+.emptyDay { padding: 16px; text-align: center; }
+.emptyDay p { font-size: 0.8125rem; color: var(--text-tertiary); }
+.bookingCard { border-left: 3px solid var(--accent); padding: 14px !important; margin-bottom: 6px; transition: transform 0.15s, box-shadow 0.15s; }
+.bookingCard:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.bookingHeader { display: flex; align-items: flex-start; gap: 10px; }
+.bookingIcon { flex-shrink: 0; margin-top: 2px; }
+.bookingInfo { flex: 1; min-width: 0; }
+.bookingTitle { font-weight: 600; font-size: 0.875rem; line-height: 1.3; }
+.bookingTime { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 2px; }
+.bookingRight { display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+.bookingCost { font-weight: 600; font-size: 0.8125rem; color: var(--accent); }
+.depLine {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 0 4px 20px;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  border-left: 2px dashed var(--border-strong);
+  margin-left: 12px;
+  margin-bottom: 4px;
+}
+
+/* Type-specific left border colors */
+.typeFlight { border-left-color: #3B82F6 !important; }
+.typeHotel { border-left-color: #F59E0B !important; }
+.typeTrain { border-left-color: #10B981 !important; }
+.typeBus { border-left-color: #8B5CF6 !important; }
+.typeActivity { border-left-color: #EC4899 !important; }
+.typeTransfer { border-left-color: #6366F1 !important; }
+
+/* Trackable booking glow */
+.trackable {
+  position: relative;
+  overflow: hidden;
+}
+.trackable::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(180deg, #3B82F6, #10B981);
+  opacity: 0.6;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Live Transport Tracker Panel - Light Boarding Pass & Train Ticket Design */
+.trackerPanel {
+  background: #FFFFFF;
+  border: 1px solid var(--border-default, #E7E5E2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.trackerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.trackerTitleArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.pulseRadarDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981;
+  animation: radarPulse 1.8s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes radarPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.trackerTitle {
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #171717;
+  text-transform: uppercase;
+}
+
+.trackerSubtitle {
+  font-size: 0.75rem;
+  color: #737373;
+  margin-top: 2px;
+}
+
+.trackerBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  color: #B45309;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.trackerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* High-Visibility Flight & Train Status Cards */
+.statusCardContainer {
+  background: #FFFFFF;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1.5px solid #E2E8F0;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.statusCardContainer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.cardOnTimeStatus {
+  border-color: #10B981 !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0FDF4 100%) !important;
+}
+
+.cardDelayedStatus {
+  border-color: #F59E0B !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF5 100%) !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.12) !important;
+}
+
+.cardCancelledStatus {
+  border-color: #EF4444 !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FEF2F2 100%) !important;
+}
+
+.statusTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.transportTag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 0.9375rem;
+  color: #0F172A;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusPillGreen {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #065F46;
+  background: #D1FAE5;
+  border: 1px solid #6EE7B7;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.statusPillAmber {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #B45309;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+  animation: amberPulse 1.8s infinite;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.statusPillRed {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #B91C1C;
+  background: #FEE2E2;
+  border: 1px solid #FCA5A5;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.statusPillGray {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.transportFullTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.statusRouteBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: #F8F7F4;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #E7E5E2;
+  font-size: 0.8125rem;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.statusRouteCity {
+  font-weight: 700;
+  color: #171717;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusRouteLine {
+  flex-shrink: 0;
+  width: 32px;
+  height: 1px;
+  background: linear-gradient(90deg, #CBD5E1 0%, #64748B 50%, #CBD5E1 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 4px;
+}
+
+.statusRouteIcon {
+  font-size: 0.75rem;
+  color: #B45309;
+  background: #F8F7F4;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.statusFooterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.75rem;
+  padding-top: 4px;
+  border-top: 1px dashed #E2E8F0;
+  width: 100%;
+  min-width: 0;
+}
+
+.statusTimeInfo {
+  color: #475569;
+  font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusStruckTime {
+  text-decoration: line-through;
+  color: #9CA3AF;
+  margin-right: 4px;
+}
+
+.statusDelayedVal {
+  color: #B45309;
+  font-weight: 800;
+  font-size: 0.8125rem;
+}
+
+.statusSyncBtn {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.statusSyncBtn:hover {
+  background: #334155;
+  color: #FFFFFF;
+  border-color: #334155;
+}
+
+.ticketBody {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ticketTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.transportNumberBadge {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #171717;
+  letter-spacing: 0.02em;
+}
+
+/* Status Pills */
+.pillOnTime {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #065F46;
+  background: #D1FAE5;
+  border: 1px solid #6EE7B7;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.dotGreen {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+  flex-shrink: 0;
+}
+
+.pillDelayed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #B45309;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  animation: amberPulse 1.8s infinite;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@keyframes amberPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  50% { box-shadow: 0 0 10px 2px rgba(245, 158, 11, 0.4); }
+}
+
+.dotAmber {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #F59E0B;
+  box-shadow: 0 0 6px #F59E0B;
+  flex-shrink: 0;
+}
+
+.pillCancelled {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #B91C1C;
+  background: #FEE2E2;
+  border: 1px solid #FCA5A5;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.pillUnknown {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ticketTitleName {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ticket Perforation & Route Bar */
+.ticketRouteBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: #F8F7F4;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #E7E5E2;
+  font-size: 0.8125rem;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.routeCity {
+  font-weight: 700;
+  color: #171717;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.routeLine {
+  flex-shrink: 0;
+  width: 32px;
+  height: 1px;
+  background: linear-gradient(90deg, #CBD5E1 0%, #64748B 50%, #CBD5E1 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 4px;
+}
+
+.routePlane {
+  font-size: 0.75rem;
+  color: #B45309;
+  background: #F8F7F4;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.ticketFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  padding-top: 4px;
+  border-top: 1px dashed #E2E8F0;
+  margin-top: 2px;
+}
+
+.timeDisplay {
+  color: #525252;
+  font-weight: 500;
+}
+
+.struckTime {
+  text-decoration: line-through;
+  color: #9CA3AF;
+  margin-right: 6px;
+}
+
+.struckTimeDark {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.newTime {
+  color: #B45309;
+  font-weight: 800;
+}
+
+.refreshText {
+  font-size: 0.75rem;
+  color: #B45309;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Callouts in Booking Timeline cards */
+.delayNoticeBox {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #FFFBEB;
+  border: 1px solid #FCD34D;
+  border-left: 4px solid #F59E0B;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.delayNoticeTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #92400E;
+}
+
+.delayNoticeDetails {
+  font-size: 0.75rem;
+  color: #78350F;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.onTimeNoticeBox {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #065F46;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badgeDelayedPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+  box-shadow: 0 1px 3px rgba(180, 83, 9, 0.15);
+}
+
+.badgeOnTimePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #6EE7B7;
+}
+
+/* Status dot with pulse animation */
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.statusDotGreen {
+  background: #22C55E;
+  box-shadow: 0 0 6px rgba(34,197,94,0.5);
+  animation: dotPulse 2s infinite;
+}
+.statusDotYellow {
+  background: #F59E0B;
+  box-shadow: 0 0 6px rgba(245,158,11,0.5);
+  animation: dotPulse 1.5s infinite;
+}
+.statusDotRed {
+  background: #EF4444;
+  box-shadow: 0 0 6px rgba(239,68,68,0.5);
+  animation: dotPulse 1s infinite;
+}
+.statusDotGray {
+  background: #475569;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Trip stats bar */
+.statsBar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.statCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+.statValue {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.statLabel {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+.statAccent { color: var(--accent) !important; }
+.statGreen { color: #22C55E !important; }
+.statBlue { color: #3B82F6 !important; }
+.statPurple { color: #8B5CF6 !important; }
+
+/* Clean Card Header & Row Layout */
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.actionColumn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  margin-left: 4px;
+}
+
+.flightChip {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trainChip {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: #F0FDF4;
+  color: #15803D;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.phoneChip {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: #F5F3FF;
+  color: #7C3AED;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.recoveredChip {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: #FEF3C7;
+  color: #B45309;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.badgeDefaultPill {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.miniSyncBtn {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s ease;
+}
+
+.miniSyncBtn:hover {
+  background: #334155;
+  color: #FFFFFF;
+}
+
+/* Refresh button spin */
+.refreshSpin {
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Mobile overrides */
+@media (max-width: 640px) {
+  .trackerPanel {
+    padding: 12px 10px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .trackerHeader {
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  .trackerTitle {
+    font-size: 0.78125rem;
+  }
+  .trackerSubtitle {
+    font-size: 0.6875rem;
+  }
+  .trackerBadge {
+    font-size: 0.6875rem;
+    padding: 3px 8px;
+  }
+  .trackerGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+  .statusCardContainer {
+    padding: 12px 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .ticketBody {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .transportNumberBadge {
+    font-size: 0.875rem;
+  }
+  .ticketTitleName {
+    font-size: 0.75rem;
+  }
+  .statusRouteBar, .ticketRouteBar {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+  .timeline { gap: 14px; }
+  .dayHeader { margin-bottom: 6px; padding-bottom: 4px; }
+  .bookingCard { padding: 12px 10px !important; margin-bottom: 6px; }
+  .bookingHeader { flex-direction: row; gap: 8px; align-items: flex-start; }
+  .titleRow { flex-direction: row; align-items: flex-start; justify-content: space-between; gap: 6px; }
+  .bookingTitle { font-size: 0.8125rem; line-height: 1.3; font-weight: 700; flex: 1; word-break: break-word; }
+  .bookingTime { font-size: 0.6875rem; margin-top: 3px; word-break: break-word; overflow-wrap: break-word; }
+  .bookingCost { font-size: 0.78125rem; font-weight: 800; white-space: nowrap; flex-shrink: 0; }
+  .badgeRow { gap: 4px; margin-top: 6px; }
+
+  .statsBar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .statCard { padding: 10px 8px; }
+  .statValue { font-size: 1rem; }
+  .statLabel { font-size: 0.625rem; }
+}

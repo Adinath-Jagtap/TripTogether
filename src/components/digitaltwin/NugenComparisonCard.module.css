@@ -1,0 +1,210 @@
+.insightsCard {
+  background: var(--bg-surface, #FFFFFF);
+  border: 1px solid var(--border-default, #E7E5E2);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sparkleBadge {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+  color: #D97706;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+}
+
+.subText {
+  font-size: 0.8125rem;
+  color: #6B7280;
+  margin: 0 0 20px 0;
+  line-height: 1.4;
+}
+
+/* 3-Column Highlights Summary Grid */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.summaryBox {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.boxHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4B5563;
+  margin-bottom: 6px;
+}
+
+.boxMainVal {
+  font-size: 1.625rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.boxSub {
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin-top: 4px;
+}
+
+/* Actionable Advice Banner */
+.adviceBanner {
+  border-radius: 12px;
+  border: 1.5px solid;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.adviceHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.adviceBody {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Waypoint Breakdown */
+.breakdownSection {
+  background: #FAFAFA;
+  border: 1px solid #F3F4F6;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.breakdownTitle {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: #374151;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.waypointList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.waypointItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.wpNumber {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  border: 1px solid #D1D5DB;
+  color: #374151;
+  font-weight: 800;
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wpContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.wpTitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wpSub {
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin-top: 2px;
+}
+
+.wpBadge {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .insightsCard { padding: 16px; border-radius: 14px; }
+  .summaryGrid { grid-template-columns: 1fr; gap: 12px; }
+  .adviceBanner { padding: 14px 16px; }
+  .waypointItem { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; }
+  .wpContent { width: 100%; white-space: normal; }
+  .wpTitle { white-space: normal; }
+  .wpBadge { grid-column: 2; justify-self: start; }
+}

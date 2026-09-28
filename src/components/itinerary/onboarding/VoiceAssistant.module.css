@@ -1,0 +1,324 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #FFFFFF;
+  border: 1px solid #E7E5E2;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #171717;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: #737373;
+}
+
+.micSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  background: linear-gradient(180deg, #FFFDF9 0%, #F8F7F4 100%);
+  border-radius: 14px;
+  border: 1px solid #E7E5E2;
+  position: relative;
+  gap: 14px;
+}
+
+.micButton {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent-gradient, linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%));
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.28);
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Idle pulse rings */
+.micButton::before,
+.micButton::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(217, 119, 6, 0.15);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.micButton::before {
+  animation: idlePulse1 3s ease-in-out infinite;
+}
+
+.micButton::after {
+  animation: idlePulse2 3s ease-in-out 1s infinite;
+}
+
+@keyframes idlePulse1 {
+  0% { width: 100%; height: 100%; opacity: 0.6; }
+  50% { width: 130%; height: 130%; opacity: 0; }
+  100% { width: 100%; height: 100%; opacity: 0; }
+}
+
+@keyframes idlePulse2 {
+  0% { width: 100%; height: 100%; opacity: 0.4; }
+  50% { width: 145%; height: 145%; opacity: 0; }
+  100% { width: 100%; height: 100%; opacity: 0; }
+}
+
+.micButton:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #D97706 0%, #B45309 50%, #92400E 100%);
+}
+
+.recording {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+  animation: recordPulse 1.5s infinite;
+}
+
+.recording::before,
+.recording::after {
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+.recording::before {
+  animation: recordRing1 1.5s ease-out infinite;
+}
+
+.recording::after {
+  animation: recordRing2 1.5s ease-out 0.3s infinite;
+}
+
+@keyframes recordPulse {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  70% { box-shadow: 0 0 0 16px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+@keyframes recordRing1 {
+  0% { width: 100%; height: 100%; opacity: 0.5; border-color: rgba(220, 38, 38, 0.3); }
+  100% { width: 160%; height: 160%; opacity: 0; border-color: rgba(220, 38, 38, 0); }
+}
+
+@keyframes recordRing2 {
+  0% { width: 100%; height: 100%; opacity: 0.4; border-color: rgba(220, 38, 38, 0.2); }
+  100% { width: 180%; height: 180%; opacity: 0; border-color: rgba(220, 38, 38, 0); }
+}
+
+.transcriptPreview {
+  font-size: 0.875rem;
+  color: #171717;
+  text-align: center;
+  max-width: 480px;
+  min-height: 24px;
+  font-style: italic;
+  animation: fadeInText 0.4s ease;
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.transcriptPlaceholder {
+  color: #9CA3AF;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.inputGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.textInput {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-default, #EBE9E5);
+  background: #FFFFFF;
+  font-size: 0.875rem;
+  color: #171717;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.textInput:focus {
+  border-color: #B45309;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+}
+
+.textInput::placeholder {
+  color: #9CA3AF;
+}
+
+.sendButton {
+  height: 44px;
+  padding: 0 18px;
+  background: var(--accent-gradient, linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%));
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(180, 83, 9, 0.18);
+}
+
+.sendButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.28);
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aiResponseBox {
+  padding: 14px 16px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-left: 4px solid #B45309;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: float-in 0.3s ease;
+}
+
+@keyframes float-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.aiResponseText {
+  font-size: 0.8125rem;
+  color: #171717;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.missingBadgeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.missingBadge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(220, 38, 38, 0.08);
+  color: #B91C1C;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Prompt pills scroll area */
+.promptScroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  mask-image: linear-gradient(to right, black 0%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 92%, transparent 100%);
+}
+
+.promptScroll::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 14px 12px;
+    gap: 12px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .title {
+    font-size: 0.875rem;
+  }
+  .subtitle {
+    display: none;
+  }
+  .micSection {
+    padding: 14px 10px;
+    gap: 10px;
+  }
+  .micButton {
+    width: 52px;
+    height: 52px;
+  }
+  .transcriptPreview {
+    font-size: 0.75rem;
+    max-width: 100%;
+  }
+  .textInput {
+    height: 42px;
+    font-size: 0.8125rem;
+    padding: 0 10px;
+  }
+  .sendButton {
+    height: 42px;
+    padding: 0 14px;
+    font-size: 0.8125rem;
+  }
+}

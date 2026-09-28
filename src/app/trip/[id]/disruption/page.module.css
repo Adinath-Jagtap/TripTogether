@@ -1,0 +1,36 @@
+.riskOverview { display: flex; align-items: center; gap: 32px; margin-bottom: 32px; padding: 24px; background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-lg); }
+.scoreCard { display: flex; align-items: center; gap: 16px; }
+.scoreCircle { width: 72px; height: 72px; border-radius: 50%; border: 4px solid; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.scoreCircle span { font-size: 1.5rem; font-weight: 700; }
+.scoreLabel { font-weight: 600; font-size: 0.9375rem; }
+.scoreSub { font-size: 0.8125rem; color: var(--text-tertiary); }
+.riskBar { display: flex; gap: 2px; flex: 1; height: 8px; border-radius: 4px; overflow: hidden; }
+.riskSegment { border-radius: 2px; }
+
+.simCard { margin-bottom: 32px; background: var(--accent-subtle); border-color: var(--accent-light); }
+.simCard h3 { margin-bottom: 16px; }
+.simForm { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.cascadeSection { margin-top: 32px; }
+.cascadeCard { display: flex; align-items: center; gap: 12px; padding: 14px 20px !important; margin-bottom: 6px; margin-left: 0; }
+.cascadeDisrupted { border-left: 3px solid var(--danger); background: var(--danger-light); }
+.cascade_missed { border-left: 3px solid var(--danger); }
+.cascade_at_risk { border-left: 3px solid var(--warning); }
+.cascade_tight { border-left: 3px solid var(--warning); }
+.impactSummary { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 12px 20px; background: var(--bg-muted); border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); }
+
+.plansGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.planCard { display: flex; flex-direction: column; }
+.recommended { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-light); }
+.planHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.planLabel { font-weight: 700; font-size: 1rem; }
+.planSummary { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 12px; flex: 1; }
+.planMetrics { display: flex; flex-wrap: wrap; gap: 12px; }
+.planMetric { display: flex; align-items: center; gap: 4px; font-size: 0.8125rem; color: var(--text-secondary); }
+
+@media (max-width: 768px) {
+  .riskOverview { flex-direction: column; }
+  .simForm { flex-direction: column; }
+  .plansGrid { grid-template-columns: 1fr; }
+  .cascadeCard { flex-direction: column; align-items: flex-start; }
+}

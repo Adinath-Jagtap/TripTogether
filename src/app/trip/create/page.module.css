@@ -1,0 +1,153 @@
+.wrapper {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.stepContent {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-default);
+}
+
+.aiBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #FFFDF9;
+  border: 1px solid #F3E8D6;
+  border-radius: var(--radius-lg);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.aiBannerLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.aiBannerIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: #FEF3C7;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.aiBannerTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.aiBannerDesc {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.successIcon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.codeBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+
+.code {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  font-family: monospace;
+}
+
+.pdfQuickUpload {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #FAF8F5;
+  border: 2px dashed #E5DECF;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.optionHoverCard {
+  border: 1px solid #E5E7EB;
+  transition: all 0.2s ease !important;
+}
+
+.optionHoverCard:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 2px 8px rgba(235, 94, 40, 0.12);
+  transform: translateY(-1px);
+}
+
+.pdfQuickIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: #FEF3C7;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.extractedBadge {
+  padding: 14px 18px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .wrapper { padding: 0 8px; }
+  .row { flex-direction: column; gap: 12px; }
+  .aiBanner { flex-direction: column; align-items: flex-start; padding: 12px; }
+  .pdfQuickUpload { flex-direction: row; align-items: center; gap: 10px; padding: 12px; }
+  .pdfQuickIcon { width: 34px; height: 34px; }
+  .extractedBadge { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px; }
+  .stepContent { padding: 16px 14px; gap: 14px; border-radius: 12px; }
+}
+

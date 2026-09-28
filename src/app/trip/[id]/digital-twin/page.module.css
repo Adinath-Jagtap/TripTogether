@@ -1,0 +1,237 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.heroSection {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+  border: 1px solid var(--border-default, #E7E5E2);
+  border-radius: 20px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.heroBadges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.heroAmberPill {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  color: #B45309;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.heroBlueBadge {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1D4ED8;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #111827;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.heroSub {
+  font-size: 0.9375rem;
+  color: #4B5563;
+  line-height: 1.6;
+  max-width: 820px;
+}
+
+/* Box 1: Live Weather Telemetry Header Card (3-Column Layout) */
+.liveWeatherCard {
+  background: #FFFFFF;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 18px;
+  padding: 22px 26px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.8fr;
+  gap: 20px;
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.colTemp {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.livePulseRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #059669;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pulseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+  100% { transform: scale(0.95); opacity: 1; }
+}
+
+.tempDisplay {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #1F2937;
+  line-height: 1;
+}
+
+.conditionMeta {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #4B5563;
+}
+
+.metricsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 1px solid #E5E7EB;
+  border-right: 1px solid #E5E7EB;
+  padding: 0 20px;
+}
+
+.metricBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.hourlyContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.hourlyTitle {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #9CA3AF;
+  letter-spacing: 0.05em;
+}
+
+.hourlyRow {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hourlyBox {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.hTime {
+  font-size: 0.6875rem;
+  color: #6B7280;
+  font-weight: 600;
+}
+
+.hTemp {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #1F2937;
+  margin: 2px 0;
+}
+
+.hRain {
+  font-size: 0.625rem;
+  color: #2563EB;
+  font-weight: 700;
+}
+
+@media (max-width: 868px) {
+  .heroSection {
+    padding: 18px 20px;
+    border-radius: 16px;
+  }
+  .heroTitle {
+    font-size: 1.35rem;
+  }
+  .heroSub {
+    font-size: 0.84375rem;
+  }
+  .liveWeatherCard {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 18px 20px;
+  }
+  .metricsGroup {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid #E5E7EB;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 12px 0;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tempDisplay {
+    font-size: 1.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: 14px 16px;
+  }
+  .heroTitle {
+    font-size: 1.2rem;
+  }
+  .liveWeatherCard {
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+}

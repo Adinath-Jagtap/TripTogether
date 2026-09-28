@@ -1,0 +1,197 @@
+[
+    {
+        "instruction": "Plan a 3-day trip to Manali from Mumbai using a combination of flight, train, and bus. Include transport details, activities, timings, and estimated costs.",
+        "input": "",
+        "output": {
+            "trip_name": "3-Day Manali Trip",
+            "destination": "Manali, Himachal Pradesh, India",
+            "duration_days": 3,
+            "travellers": 3,
+            "currency": "INR",
+            "transport_mode": "flight_train_bus",
+            "itinerary": [
+                {
+                    "day": 1,
+                    "title": "Mumbai → Delhi → Chandigarh → Manali",
+                    "activities": [
+                        {
+                            "time": "05:00",
+                            "title": "Reach Mumbai Airport",
+                            "type": "airport",
+                            "location": "Mumbai Airport"
+                        },
+                        {
+                            "time": "06:00",
+                            "title": "Flight to Delhi",
+                            "type": "flight",
+                            "flight_number": "6E656",
+                            "from": "BOM",
+                            "to": "DEL",
+                            "estimated_cost": 4000
+                        },
+                        {
+                            "time": "08:30",
+                            "title": "Reach New Delhi Railway Station",
+                            "type": "transfer",
+                            "location": "New Delhi Railway Station"
+                        },
+                        {
+                            "time": "10:00",
+                            "title": "Train to Chandigarh",
+                            "type": "train",
+                            "train_number": "12011",
+                            "train_name": "New Delhi–Kalka Shatabdi Express",
+                            "from": "NDLS",
+                            "to": "CDG",
+                            "estimated_cost": 1000
+                        },
+                        {
+                            "time": "13:20",
+                            "title": "Arrive in Chandigarh",
+                            "type": "arrival",
+                            "location": "Chandigarh"
+                        },
+                        {
+                            "time": "13:30",
+                            "title": "Lunch",
+                            "type": "food",
+                            "estimated_cost": 300
+                        },
+                        {
+                            "time": "14:00",
+                            "title": "Bus to Manali",
+                            "type": "bus",
+                            "from": "Chandigarh",
+                            "to": "Manali",
+                            "duration": "7-8 hours",
+                            "estimated_cost": 1200
+                        },
+                        {
+                            "time": "21:30",
+                            "title": "Hotel check-in",
+                            "type": "hotel",
+                            "location": "Manali",
+                            "estimated_cost": 1000
+                        },
+                        {
+                            "time": "22:00",
+                            "title": "Dinner",
+                            "type": "food",
+                            "estimated_cost": 350
+                        }
+                    ]
+                },
+                {
+                    "day": 2,
+                    "title": "Explore Manali",
+                    "activities": [
+                        {
+                            "time": "08:00",
+                            "title": "Breakfast",
+                            "type": "food",
+                            "estimated_cost": 200
+                        },
+                        {
+                            "time": "09:00",
+                            "title": "Visit Solang Valley",
+                            "type": "activity",
+                            "location": "Solang Valley",
+                            "estimated_cost": 1200
+                        },
+                        {
+                            "time": "13:00",
+                            "title": "Lunch",
+                            "type": "food",
+                            "estimated_cost": 300
+                        },
+                        {
+                            "time": "14:30",
+                            "title": "Visit Hadimba Temple",
+                            "type": "sightseeing",
+                            "location": "Hadimba Temple",
+                            "estimated_cost": 0
+                        },
+                        {
+                            "time": "16:00",
+                            "title": "Explore Old Manali",
+                            "type": "sightseeing",
+                            "location": "Old Manali",
+                            "estimated_cost": 300
+                        },
+                        {
+                            "time": "18:00",
+                            "title": "Explore Mall Road",
+                            "type": "shopping",
+                            "location": "Mall Road, Manali",
+                            "estimated_cost": 0
+                        },
+                        {
+                            "time": "20:00",
+                            "title": "Dinner",
+                            "type": "food",
+                            "estimated_cost": 400
+                        }
+                    ]
+                },
+                {
+                    "day": 3,
+                    "title": "Manali → Chandigarh → Delhi → Mumbai",
+                    "activities": [
+                        {
+                            "time": "07:00",
+                            "title": "Breakfast",
+                            "type": "food",
+                            "estimated_cost": 200
+                        },
+                        {
+                            "time": "08:00",
+                            "title": "Bus to Chandigarh",
+                            "type": "bus",
+                            "from": "Manali",
+                            "to": "Chandigarh",
+                            "estimated_cost": 1200
+                        },
+                        {
+                            "time": "16:00",
+                            "title": "Arrive in Chandigarh",
+                            "type": "arrival",
+                            "location": "Chandigarh"
+                        },
+                        {
+                            "time": "17:00",
+                            "title": "Train to New Delhi",
+                            "type": "train",
+                            "train_number": "22448",
+                            "train_name": "Vande Bharat Express",
+                            "from": "CDG",
+                            "to": "NDLS",
+                            "estimated_cost": 1200
+                        },
+                        {
+                            "time": "18:30",
+                            "title": "Arrive in Delhi",
+                            "type": "arrival",
+                            "location": "New Delhi"
+                        },
+                        {
+                            "time": "20:30",
+                            "title": "Flight to Mumbai",
+                            "type": "flight",
+                            "from": "DEL",
+                            "to": "BOM",
+                            "estimated_cost": 4000
+                        },
+                        {
+                            "time": "22:45",
+                            "title": "Arrive in Mumbai",
+                            "type": "arrival",
+                            "location": "Mumbai"
+                        }
+                    ]
+                }
+            ],
+            "total_estimated_cost_per_person": 17150,
+            "total_estimated_cost": 51450
+        }
+    }
+]
