@@ -29,7 +29,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/PWA-Installable-3b82f6?style=for-the-badge" alt="PWA" />
   <img src="https://img.shields.io/badge/License-Open%20Source-10b981?style=for-the-badge" alt="Open Source" />
-  <img src="https://img.shields.io/badge/v2-HORIZON%20%E2%86%92-f59e0b?style=for-the-badge" alt="HORIZON v2" />
+  <img src="https://img.shields.io/badge/v2-NEXT__CHAPTER%20%E2%86%92-f59e0b?style=for-the-badge" alt="Next Chapter" />
 </p>
 
 <br/>
@@ -178,7 +178,7 @@ Recovery triggers "call_vendor" action
 
 If `needs_manual_call`, a **tap-to-dial** button opens the phone dialer with the hotel's number pre-filled.
 
-> **Note:** This was built under resource constraints — no Twilio/Plivo budget. [HORIZON v2](docs/HORIZON.md) upgrades this to real telephony.
+> **Note:** This was built under resource constraints — no Twilio/Plivo budget. [NEXT_CHAPTER](docs/NEXT_CHAPTER.md) covers the Plivo/Twilio upgrade.
 
 <br/>
 
@@ -449,7 +449,7 @@ TripTogether/
 │   ├── PRD.md                       # Product Requirements Document
 │   ├── ARCHITECTURE.md              # System design & key decisions
 │   ├── ALGORITHMS.md                # Algorithm pseudocode & complexity
-│   └── HORIZON.md                   # v2 roadmap with honest v1 audit
+│   └── NEXT_CHAPTER.md              # v2 roadmap with honest v1 audit
 ├── scripts/
 │   └── generate-sw.js               # Build-time Firebase SW generator
 └── vercel.json                      # Cron job configuration
