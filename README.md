@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://triptoghether.syntaxsyndicate.co.in/">🌐 Live Demo</a>&nbsp;&nbsp;•&nbsp;&nbsp;
+  <a href="https://triptogether.syntaxsyndicate.co.in/">🌐 Live Demo</a>&nbsp;&nbsp;•&nbsp;&nbsp;
   <a href="docs/PRD.md">📋 PRD</a>&nbsp;&nbsp;•&nbsp;&nbsp;
   <a href="docs/ARCHITECTURE.md">🏗️ Architecture</a>&nbsp;&nbsp;•&nbsp;&nbsp;
   <a href="docs/ALGORITHMS.md">⚙️ Algorithms</a>&nbsp;&nbsp;•&nbsp;&nbsp;
