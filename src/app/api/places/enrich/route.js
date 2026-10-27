@@ -62,27 +62,27 @@ export async function POST(request) {
     // ────────────── TIER 2: Apify Google Places Scraper ──────────────
     if ((!result || !result.vendor_phone) && apifyToken) {
       try {
-        const apifyRes = await fetch(`https://api.apify.com/v2/acts/compass~google-places-crawler/run-sync-get-dataset-items?token=${apifyToken}&limit=1`, {
+        const apifyRes = await fetch(`https://api.apify.com/v2/acts/johnvc~google-maps-places-api/run-sync-get-dataset-items?token=${apifyToken}&limit=1`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            searchStringsArray: [searchContext],
-            maxCrawledPlacesPerSearch: 1,
+            searchTerms: [searchContext],
+            maxResultsPerSearch: 20,
             language: 'en'
           })
         });
 
         if (apifyRes.ok) {
           const items = await apifyRes.json();
-          if (Array.isArray(items) && items.length > 0 && items[0].phone) {
+          if (Array.isArray(items) && items.length > 0 && items[0].phoneNumber) {
             const p = items[0];
             result = {
-              vendor_phone: p.phoneUnformatted || p.phone,
+              vendor_phone: p.phoneNumber,
               vendor_address: p.address || result?.vendor_address || `${cleanedQuery}, ${city}`,
               vendor_website: p.website || result?.vendor_website || null,
-              vendor_rating: p.totalScore || 4.6,
+              vendor_rating: p.rating || 4.6,
               google_place_id: p.placeId || result?.google_place_id || null,
-              google_maps_url: p.url || result?.google_maps_url || null,
+              google_maps_url: p.latitude && p.longitude ? `https://maps.google.com/?q=${p.latitude},${p.longitude}` : result?.google_maps_url || null,
               formatted_name: p.title || cleanedQuery,
               source: 'google_places'
             };
